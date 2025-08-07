@@ -68,23 +68,54 @@ Tip(text := "", TimeDelay := -1000) {
 LoadEnvVars(filePath := ".env") {
     if !FileExist(filePath) {
         MsgBox "Файл .env не найден: " filePath
-        return
+        return Map()
     }
 
     envContent := FileRead(filePath)  ; Читаем содержимое .env файла
+    envMap := Map()  ; Объект для хранения ключей и значений
     for line in StrSplit(envContent, "`n") {
         line := Trim(line)  ; Убираем пробелы и переносы строк
         if (line = "" || SubStr(line, 1, 1) = "#")  ; Пропускаем пустые и закомментированные строки
             continue
+
+        ; Удаляем комментарий после символа #, если он вне кавычек
+        commentPos := 0
+        inSingle := false
+        inDouble := false
+        Loop Parse line {
+            char := A_LoopField
+            if (char = "'" && !inDouble) {
+                inSingle := !inSingle
+            } else if (char = '"' && !inSingle) {
+                inDouble := !inDouble
+            } else if (char = "#" && !inSingle && !inDouble) {
+                commentPos := A_Index
+                break
+            }
+        }
+        if commentPos {
+            line := Trim(SubStr(line, 1, commentPos - 1))
+            if (line = "")
+                continue
+        }
 
         ; Разделяем строку по первому знаку "=" и убираем лишние пробелы
         envVar := StrSplit(line, "=", "", 2)
         if envVar.Length == 2 {
             key := Trim(envVar[1])  ; Убираем пробелы у ключа
             value := Trim(envVar[2])  ; Убираем пробелы у значения
+
+            ; Удаляем обрамляющие одинарные или двойные кавычки
+            if (value != "" && ((SubStr(value, 1, 1) = '"' && SubStr(value, -1) = '"')
+                || (SubStr(value, 1, 1) = "'" && SubStr(value, -1) = "'"))) {
+                value := SubStr(value, 2, StrLen(value) - 2)
+            }
+
             EnvSet(key, value)  ; Устанавливаем переменную окружения
+            envMap[key] := value  ; Сохраняем в объект
         }
     }
+    return envMap
 }
 
 ; GetTextAtCaret(unit)
