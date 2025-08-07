@@ -6,7 +6,6 @@
 isScriptActive := false
 HotkeysUsed := false
 CapsLockHandled := false
-textElement := 0
 
 main()
 
