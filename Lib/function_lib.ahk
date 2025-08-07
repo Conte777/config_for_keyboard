@@ -17,21 +17,18 @@ OwnSend(message := "") {
 ; Создание GUI
 CreateGui(text := "MovMod") {
     ; Инициализация глобальных переменных
-    global textElement
-
-    ; Создание окна без заголовка и кнопок
-    mygui := Gui("-Caption +AlwaysOnTop +ToolWindow")
+    global gGui := Gui("-Caption +AlwaysOnTop +ToolWindow"), textElement
 
     ; Установка шрифта и добавление текстового элемента
-    mygui.SetFont("q5 s12", "Verdana")
-    textElement := mygui.AddText("cRed ", text)
+    gGui.SetFont("q5 s12", "Verdana")
+    textElement := gGui.AddText("cRed ", text)
 
     ; Настройка размеров окна под текст
-    mygui.Show("x30 y1385 AutoSize")
+    gGui.Show("x30 y1385 AutoSize")
 
     ; Установка прозрачности окна
-    mygui.BackColor := "000000"
-    WinSetTransColor("000000", mygui)
+    gGui.BackColor := "000000"
+    WinSetTransColor("000000", gGui)
 
     ; Отключаем видимость до лучших времен
     HideGUI()
@@ -39,21 +36,33 @@ CreateGui(text := "MovMod") {
 
 ; Функция для обновления текста
 UpdateGUI(newText) {
-    global textElement
+    global gGui, textElement
     textElement.Visible := true
     textElement.Text := newText
+    gGui.Show("AutoSize")
 }
 
 ; Функция для показа GUI
 ShowGUI() {
-    global textElement
+    global gGui, textElement
     textElement.Visible := true
+    gGui.Show()
 }
 
 ; Функция для скрытия GUI
 HideGUI() {
-    global textElement
+    global gGui, textElement
     textElement.Visible := false
+    gGui.Hide()
+}
+
+; Корректное уничтожение GUI
+DestroyGUI() {
+    global gGui
+    if IsSet(gGui) {
+        try gGui.Destroy()
+        gGui := ""
+    }
 }
 
 ; Показ временной подсказки
