@@ -21,7 +21,7 @@ CreateGui(text := "MovMod") {
 
     ; Установка шрифта и добавление текстового элемента
     gGui.SetFont("q5 s12", "Verdana")
-    textElement := gGui.AddText("cRed ", text)
+    global textElement := gGui.AddText("cRed ", text)
 
     ; Настройка размеров окна под текст
     gGui.Show("x30 y1385 AutoSize")
@@ -35,6 +35,7 @@ CreateGui(text := "MovMod") {
 }
 
 ; Функция для обновления текста
+; Не проверял работает или нет
 UpdateGUI(newText) {
     global gGui, textElement
     textElement.Visible := true
@@ -43,17 +44,16 @@ UpdateGUI(newText) {
 }
 
 ; Функция для показа GUI
+; Не сбрасывает фокус с окна
 ShowGUI() {
-    global gGui, textElement
+    global textElement
     textElement.Visible := true
-    gGui.Show()
 }
 
 ; Функция для скрытия GUI
 HideGUI() {
-    global gGui, textElement
+    global textElement
     textElement.Visible := false
-    gGui.Hide()
 }
 
 ; Корректное уничтожение GUI
@@ -91,7 +91,7 @@ LoadEnvVars(filePath := ".env") {
         commentPos := 0
         inSingle := false
         inDouble := false
-        Loop Parse line {
+        loop parse line {
             char := A_LoopField
             if (char = "'" && !inDouble) {
                 inSingle := !inSingle
@@ -116,7 +116,7 @@ LoadEnvVars(filePath := ".env") {
 
             ; Удаляем обрамляющие одинарные или двойные кавычки
             if (value != "" && ((SubStr(value, 1, 1) = '"' && SubStr(value, -1) = '"')
-                || (SubStr(value, 1, 1) = "'" && SubStr(value, -1) = "'"))) {
+            || (SubStr(value, 1, 1) = "'" && SubStr(value, -1) = "'"))) {
                 value := SubStr(value, 2, StrLen(value) - 2)
             }
 
