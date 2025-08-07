@@ -1,5 +1,5 @@
 ﻿#SingleInstance Force
-#Include function_lib.ahk
+#Include Lib/function_lib.ahk
 #Requires AutoHotkey v2.0+
 
 ; Инициализация глобальных переменных

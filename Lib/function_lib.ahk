@@ -1,4 +1,5 @@
 #Requires AutoHotkey v2.0+
+#Include UIA.ahk
 
 ; Функция отправки клавиш
 OwnSend(message := "") {
@@ -153,7 +154,7 @@ GetCaretOffset() {
     el := _GetFocusedElement()
 
     tp2 := TryGetTP2(el)
-    tp  := TryGetTP(el)
+    tp := TryGetTP(el)
 
     if (tp2 && tp) {
         caret := tp2.GetCaretRange(&isActive)
