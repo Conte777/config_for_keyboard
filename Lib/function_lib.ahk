@@ -1,5 +1,6 @@
 #Requires AutoHotkey v2.0+
 #Include UIA.ahk
+#Include UIA_Browser.ahk
 
 ; Функция отправки клавиш
 OwnSend(message := "") {
@@ -91,6 +92,9 @@ LoadEnvVars(filePath := ".env") {
 GetTextAtCaret(unit := "word") {
     el := _GetFocusedElement()
 
+    if (unit = "word" && _IsBrowserWindow())
+        return _Browser_GetWordAtCaret()
+
     ; Весь текст
     if (unit = "document" || unit = "all") {
         tp := TryGetTP(el)
@@ -151,6 +155,9 @@ GetTextAtCaret(unit := "word") {
 
 ; Позиция каретки (0-based). Требуется TextPattern2 или TextPattern.
 GetCaretOffset() {
+    if (_IsBrowserWindow())
+        return _Browser_GetCaretOffset()
+
     el := _GetFocusedElement()
 
     tp2 := TryGetTP2(el)
@@ -279,4 +286,68 @@ _HasTextPattern(el) {
     } catch {
         return false
     }
+}
+
+_IsBrowserWindow() {
+    try {
+        proc := WinGetProcessName("A")
+        return RegExMatch(proc, "i)^(chrome|msedge|firefox|brave|opera|vivaldi)\.exe$")
+    } catch {
+        return false
+    }
+}
+
+_Browser_GetCaretOffset() {
+    browser := UIA_Browser("A")
+    js := "
+(LTrim Join
+    (() => {
+        const el = document.activeElement;
+        if(!el) return -1;
+        if (el.selectionStart !== undefined) {
+            return el.selectionStart;
+        } else {
+            const sel = window.getSelection();
+            if (!sel || sel.rangeCount === 0) return -1;
+            const range = sel.getRangeAt(0);
+            const pre = range.cloneRange();
+            pre.selectNodeContents(el);
+            pre.setEnd(range.startContainer, range.startOffset);
+            return pre.toString().length;
+        }
+    })()
+)"
+    offset := browser.JSReturnThroughClipboard(js)
+    return Integer(offset)
+}
+
+_Browser_GetWordAtCaret() {
+    browser := UIA_Browser("A")
+    js := "
+(LTrim Join
+    (() => {
+        const el = document.activeElement;
+        if(!el) return '';
+        if (el.selectionStart !== undefined) {
+            const v = el.value;
+            const pos = el.selectionStart;
+            let s = pos, e = pos;
+            const re = /\\s/;
+            while (s > 0 && !re.test(v[s-1])) s--;
+            while (e < v.length && !re.test(v[e])) e++;
+            return v.substring(s, e);
+        } else {
+            const sel = window.getSelection();
+            if (!sel || sel.rangeCount === 0) return '';
+            const text = sel.focusNode.textContent;
+            let pos = sel.focusOffset;
+            let s = pos, e = pos;
+            const re = /\\s/;
+            while (s > 0 && !re.test(text[s-1])) s--;
+            while (e < text.length && !re.test(text[e])) e++;
+            return text.substring(s, e);
+        }
+    })()
+)"
+    return browser.JSReturnThroughClipboard(js)
 }
