@@ -71,89 +71,57 @@ main() {
 ; Cursor control keys
 ; ----------------------------------------------------------------
 
-*j:: OwnSend("{Blind}{Left}")	    ; j     Left
-*k:: OwnSend("{Blind}{Down}")	    ; k     Down
-*l:: OwnSend("{Blind}{Right}")	    ; l     Right
-*i:: OwnSend("{Blind}{Up}")         ; i     Up
-*u:: OwnSend("{Blind}{Home}")       ; u     Home
-*o:: OwnSend("{Blind}{End}")        ; o     End
-*sc027:: OwnSend("{Blind}^{Enter}")	; ;:    New line under this one
-*p:: OwnSend("{Blind}+^{Enter}")	; p     New line above this one
-*n:: OwnSend("{Blind}^{Left}")      ; n     Word left
-*m:: OwnSend("{Blind}^{Right}")     ; m     Word right
-
-; ----------------------------------------------------------------
-; General Purpose Keys
-; ----------------------------------------------------------------
-
-*h:: OwnSend("{Blind}{Backspace}")	; /?    BackSpace
-*sc035:: OwnSend("{Blind}{Del}")	    ; .>    Del
-*sc033:: OwnSend("{Blind}^{Backspace}") ; ,<    Control+Backspace
-
-; ----------------------------------------------------------------
-; Copy/Paste/Cut/Select_all/Undo
-; ----------------------------------------------------------------
-
-+c:: OwnSend("{Home}{Home}+{End}^c{Home}")  ; C   copy whole line
-+x:: OwnSend("{Home}{Home}+{End}^x{Del}")   ; .>  cut whole line
-
-a:: OwnSend("{Blind}^a")    ; a         Select all
-c:: OwnSend("{Blind}^c")    ; c         Copy
-x:: OwnSend("{Blind}^x")    ; x         Cut
-v:: OwnSend("{Blind}^v")    ; v         Past
-z:: OwnSend("{Blind}^z")    ; z         Undo
-+z:: OwnSend("{Blind}+^z")  ; Shift+z   Redo
+*h:: OwnSend("{Blind}{Left}")       ; h     Left
+*j:: OwnSend("{Blind}{Down}")       ; j     Down
+*k:: OwnSend("{Blind}{Up}")         ; k     Up
+*l:: OwnSend("{Blind}{Right}")      ; l     Right
+*b:: OwnSend("{Blind}^{Left}")      ; b     Word left
+*w:: OwnSend("{Blind}^{Right}")     ; w     Word right
+*e:: OwnSend("{Blind}^{Right}{Left}") ; e   End of word
+*0:: OwnSend("{Blind}{Home}")       ; 0     Line start
+*+4:: OwnSend("{Blind}{End}")        ; $     Line end
 
 ; ----------------------------------------------------------------
 ; Punctuation marks
 ; ----------------------------------------------------------------
 
-s:: OwnSend("{Blind};")
-+s:: OwnSend("{Blind}:")
-d:: OwnSend("{Blind}.")
-+d:: OwnSend("{Blind}{,}")
-e:: OwnSend("{Blind}'")
-+e:: OwnSend("{Blind}`"")
-q:: OwnSend("{Blind}/")
-+q:: OwnSend("{Blind}?")
-w:: OwnSend("{Blind}{#}")
-+w:: OwnSend("{Blind}{@}")
 *Esc:: OwnSend("{Blind}``")
 
 ; ----------------------------------------------------------------
-; Brackets
+; Editing
 ; ----------------------------------------------------------------
 
-f:: OwnSend("{Blind}(")
-g:: OwnSend("{Blind})")
-r:: OwnSend("{Blind}[")
-t:: OwnSend("{Blind}]")
-+r:: OwnSend("{Blind}{{}")
-+t:: OwnSend("{Blind}{}}")
+*x:: OwnSend("{Blind}{Del}")            ; x     Delete char under cursor
+*+x:: OwnSend("{Blind}{Backspace}")     ; X     Delete char before cursor
+*d:: OwnSend("{Blind}^x")               ; d     Cut
+*y:: OwnSend("{Blind}^c")               ; y     Copy
+*p:: OwnSend("{Blind}^v")               ; p     Paste
+*u:: OwnSend("{Blind}^z")               ; u     Undo
+*+u:: OwnSend("{Blind}+^z")             ; U     Redo
 
 ; ----------------------------------------------------------------
 ; Black list
 ; ----------------------------------------------------------------
 
-*y:: return
-*b:: return
-*sc028:: return
-*sc01a:: return
-*sc01b:: return
-*sc034:: return
-*sc02b:: return
-*1:: return
-*2:: return
-*3:: return
-*4:: return
-*5:: return
-*6:: return
-*7:: return
-*8:: return
-*9:: return
-*0:: return
-*-:: return
-*=:: return
+; *y:: return
+; *b:: return
+; *sc028:: return
+; *sc01a:: return
+; *sc01b:: return
+; *sc034:: return
+; *sc02b:: return
+; *1:: return
+; *2:: return
+; *3:: return
+; *4:: return
+; *5:: return
+; *6:: return
+; *7:: return
+; *8:: return
+; *9:: return
+; *0:: return
+; *-:: return
+; *=:: return
 
 #HotIf
 
