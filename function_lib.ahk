@@ -25,7 +25,7 @@ CreateGui(text := "MovMod") {
     textElement := mygui.AddText("cRed ", text)
 
     ; Настройка размеров окна под текст
-    mygui.Show("x3735 y1175 AutoSize")
+    mygui.Show("x30 y1385 AutoSize")
 
     ; Установка прозрачности окна
     mygui.BackColor := "000000"
@@ -76,7 +76,7 @@ LoadEnvVars(filePath := ".env") {
             continue
 
         ; Разделяем строку по первому знаку "=" и убираем лишние пробелы
-        envVar := StrSplit(line, "=", 2)
+        envVar := StrSplit(line, "=", "", 2)
         if envVar.Length == 2 {
             key := Trim(envVar[1])  ; Убираем пробелы у ключа
             value := Trim(envVar[2])  ; Убираем пробелы у значения
