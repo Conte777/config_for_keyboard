@@ -9,7 +9,7 @@ set tempPath="%~dp0template.xml"
 :: Создание пути к файлу задачи
 set targetPath="%~dp0task.xml"
 :: Получение userSID
-for /f "tokens=2 delims== " %%i in ('wmic useraccount where name^="%username%" get sid /value') do set "usersid=%%i"
+for /f "usebackq delims=" %%i in (`powershell -command "$user = [System.Security.Principal.WindowsIdentity]::GetCurrent(); $user.User.Value"`) do set "usersid=%%i"
 :: Получение названия учетной записи
 set "fullusername=%COMPUTERNAME%\%USERNAME%"
 :: Получение текущего времени
